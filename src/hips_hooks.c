@@ -242,19 +242,44 @@ int hips_parse_dns_query(struct sk_buff *skb, char *domain, size_t domain_size)
 // 解析网络地址
 int hips_parse_network_addr(struct sk_buff *skb, struct hips_network_addr *addr)
 {
+    struct iphdr *iph;
+    struct ipv6hdr *ip6h;
+    struct tcphdr *tcp;
+    struct udphdr *udp;
+    
     if (skb->protocol == htons(ETH_P_IP)) {
-        struct iphdr *iph = ip_hdr(skb);
+        iph = ip_hdr(skb);
         addr->family = AF_INET;
         addr->addr.ipv4 = iph->daddr;
-        addr->port = 0; // 需要从 TCP/UDP 头获取
+        
+        // 解析端口信息
+        if (iph->protocol == IPPROTO_TCP) {
+            tcp = tcp_hdr(skb);
+            addr->port = ntohs(tcp->dest);
+        } else if (iph->protocol == IPPROTO_UDP) {
+            udp = udp_hdr(skb);
+            addr->port = ntohs(udp->dest);
+        } else {
+            addr->port = 0;
+        }
         return 0;
     }
 #ifdef CONFIG_IPV6
     else if (skb->protocol == htons(ETH_P_IPV6)) {
-        struct ipv6hdr *ip6h = ipv6_hdr(skb);
+        ip6h = ipv6_hdr(skb);
         addr->family = AF_INET6;
         memcpy(addr->addr.ipv6, &ip6h->daddr, 16);
-        addr->port = 0; // 需要从 TCP/UDP 头获取
+        
+        // 解析端口信息
+        if (ip6h->nexthdr == IPPROTO_TCP) {
+            tcp = tcp_hdr(skb);
+            addr->port = ntohs(tcp->dest);
+        } else if (ip6h->nexthdr == IPPROTO_UDP) {
+            udp = udp_hdr(skb);
+            addr->port = ntohs(udp->dest);
+        } else {
+            addr->port = 0;
+        }
         return 0;
     }
 #endif

@@ -1,0 +1,127 @@
+{
+  "enabled": true,
+  "log_level": 2,
+  "max_rules": 1000,
+  "config_file": "/etc/hips/config.json",
+  "rules": [
+    {
+      "rule_id": 1,
+      "type": "exec",
+      "action": "block",
+      "priority": 100,
+      "target": "/usr/bin/malware.exe",
+      "description": "恶意软件示例"
+    },
+    {
+      "rule_id": 2,
+      "type": "exec",
+      "action": "block",
+      "priority": 90,
+      "target": "/tmp/*.exe",
+      "description": "阻止临时目录中的可执行文件"
+    },
+    {
+      "rule_id": 3,
+      "type": "exec",
+      "action": "log",
+      "priority": 50,
+      "target": "/usr/bin/sudo",
+      "description": "记录sudo命令使用"
+    },
+    {
+      "rule_id": 4,
+      "type": "dns",
+      "action": "block",
+      "priority": 80,
+      "target": "evil.com",
+      "description": "恶意域名"
+    },
+    {
+      "rule_id": 5,
+      "type": "dns",
+      "action": "block",
+      "priority": 70,
+      "target": "*.malware.com",
+      "description": "恶意域名通配符"
+    },
+    {
+      "rule_id": 6,
+      "type": "dns",
+      "action": "log",
+      "priority": 30,
+      "target": "*.suspicious.com",
+      "description": "记录可疑域名访问"
+    },
+    {
+      "rule_id": 7,
+      "type": "network",
+      "action": "block",
+      "priority": 85,
+      "target": "192.168.1.100",
+      "description": "恶意IP地址"
+    },
+    {
+      "rule_id": 8,
+      "type": "network",
+      "action": "block",
+      "priority": 75,
+      "target": "10.0.0.0/8",
+      "description": "阻止内网访问"
+    },
+    {
+      "rule_id": 9,
+      "type": "network",
+      "action": "log",
+      "priority": 40,
+      "target": "8.8.8.8",
+      "description": "记录Google DNS访问"
+    },
+    {
+      "rule_id": 10,
+      "type": "network",
+      "action": "block",
+      "priority": 95,
+      "target": "2001:db8::1",
+      "description": "恶意IPv6地址"
+    }
+  ],
+  "whitelist": [
+    {
+      "type": "exec",
+      "target": "/usr/bin/systemctl",
+      "description": "系统服务管理工具"
+    },
+    {
+      "type": "exec",
+      "target": "/usr/bin/apt",
+      "description": "包管理器"
+    },
+    {
+      "type": "dns",
+      "target": "google.com",
+      "description": "Google域名"
+    },
+    {
+      "type": "network",
+      "target": "1.1.1.1",
+      "description": "Cloudflare DNS"
+    }
+  ],
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "file": "/var/log/hips.log",
+    "max_size": "10MB",
+    "max_files": 5
+  },
+  "performance": {
+    "max_rules_per_type": 1000,
+    "cache_size": 1024,
+    "timeout_ms": 100
+  },
+  "security": {
+    "signature_verification": true,
+    "hash_checking": true,
+    "sandbox_mode": false
+  }
+} 

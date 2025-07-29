@@ -1,0 +1,75 @@
+# HIPS Kernel Module Git Ignore File
+
+# 编译生成的文件
+*.ko
+*.o
+*.mod.c
+*.mod.o
+*.symvers
+*.order
+*.cmd
+*.d
+*.tmp_versions/
+*.ko.cmd
+*.ko.unsigned
+
+# 用户空间工具
+hipsctl
+hips-config
+
+# 内核模块相关
+Module.symvers
+modules.order
+.ko.cmd
+.ko.unsigned
+
+# 构建目录
+build/
+dist/
+
+# 临时文件
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# 配置文件（可选，根据安全需求决定）
+# config.json
+# *.conf
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# IDE文件
+.vscode/
+.idea/
+*.sublime-*
+
+# 测试文件
+test_*
+*.test
+
+# 文档生成
+docs/_build/
+docs/html/
+
+# 包文件
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# 签名文件
+*.sig
+*.asc
+
+# 系统文件
+.fuse_hidden*
+.nfs* 
